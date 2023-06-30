@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>online javascript compiler</title>
+    <style>
+        .box {
+            display: flex;
+            flex-direction: row;
+            gap:10px;
+        }
+        .blue{
+            width: 100px;
+            background-color: #000;
+            border: none;
+            color: #fff;
+            height: 30px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .output{
+            width: 100%;
+            height: 78vh;
+            border: 1px solid #000;
+        }
+        .header{
+            text-align: center;
+        }
+        #outputBox {
+            white-space: pre; /* Preserve white space */
+        }
+    </style>
+</head>
+
+<body>
+    <h3 class="header">Welcome to online javascript compiler</h3>
+
+    <div class="box">
+        <div>
+         <textarea rows="25" cols="70" id="inputCode">
+
+        </textarea>
+        
+        </div>
+        <div>
+            <button class="blue" id="run">Run</button>
+            <button class="blue" id="Beautify">Js Beautify</button>
+        </div>
+        <div class="output">
+            <div id="outputBox"></div>
+        </div>
+    </div>
+
+    <script>
+document.getElementById("run").addEventListener("click", () => {
+  const data = document.getElementById("inputCode").value; // Move it here
+  console.log(data, "Clicking");
+  fetch("/compiler", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ data: data }),
+  })
+    .then((res) => res.json())
+    .then((res) => {
+        const outputLines = Array.isArray(res) ? res : [res]; // Check if response is an array
+
+       
+                    
+
+        const outputHtml = outputLines.map((line) => `<div>${line}</div>`).join("");
+        document.getElementById("outputBox").innerHTML = outputHtml;
+      })
+
+    .catch((error) => console.log(error));
+});
+
+document.getElementById("Beautify").addEventListener("click", () => {
+  const data = document.getElementById("inputCode").value; // Move it here
+  console.log(data, "Clicking");
+  fetch("/formate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ data: data }),
+  })
+    .then((res) => res.json())
+    .then((res) => {
+       
+        const outputLines = Array.isArray(res) ? res : [res]; // Check if response is an array
+        const outputHtml = outputLines.map((line) => `<div>${line}</div>`).join("");
+
+        console.log(outputHtml, "outputHtml")
+        document.getElementById("outputBox").innerHTML = outputHtml;
+      })
+
+    .catch((error) => console.log(error));
+});
+
+
+    </script>
+
+</body>
+
+</html>
