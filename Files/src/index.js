@@ -52,7 +52,7 @@ app.post("/compiler", (req, res) =>{
                 let outformat = stdout.trim().split("\n")
                 // let newFormatted =  outformat.join("\n")
                 res.send(outformat);  
-            }else{
+            }else if(stderr){
                 res.send(stderr.trim()); 
             }
     
